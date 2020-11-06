@@ -1,23 +1,56 @@
-import logo from './logo.svg';
 import './App.css';
+import { Formik } from 'formik';
+
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Fauna DB Example</h1>
+      <Formik
+       initialValues={{ message: '' }}
+       validate={values => {
+         const errors = {};
+         if (!values.message) {
+           errors.message = 'Required';
+         }  
+         return errors;
+       }}
+       onSubmit={(values, { setSubmitting }) => {
+          console.log("values",values)
+          fetch('/.netlify/functions/addMessage',{
+            method:"post",
+            body:JSON.stringify(values)
+          })
+          .then(resp=>resp.json())
+          .then(data=>console.log("data",data))
+       }}
+     >
+       {({
+         values,
+         errors,
+         touched,
+         handleChange,
+         handleBlur,
+         handleSubmit,
+         isSubmitting,
+         /* and other goodies */
+       }) => (
+         <form onSubmit={handleSubmit}>
+           <input
+             type="text"
+             name="message"
+             onChange={handleChange}
+             onBlur={handleBlur}
+             value={values.message}
+           />
+           {errors.message && touched.message && errors.message}
+        
+           <button type="submit" disabled={isSubmitting}>
+             Submit
+           </button>
+         </form>
+       )}
+     </Formik>
     </div>
   );
 }
