@@ -5,7 +5,8 @@ import { Formik } from 'formik';
 function App() {
   return (
     <div className="App">
-      <h1>Fauna DB Example</h1>
+      {/* <h1>Fauna DB Example</h1> */}
+      <h1>Fauna DB curp app</h1>
       <Formik
        initialValues={{ message: '' }}
        validate={values => {
